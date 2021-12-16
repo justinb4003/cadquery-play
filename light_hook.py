@@ -1,9 +1,9 @@
 import cadquery as cq
 
-top_hanger_id = 12.5
-bottom_hanger_id = 30.0
+top_hanger_id = 11.9
+bottom_hanger_id = 45.0
 thickness = 4.0
-width = 8
+width = 15
 drop_height = 25 
 
 def make_half_circle(wp, r):
@@ -29,12 +29,13 @@ hook = (
   .extrude(drop_height)
 )
 
-d = 30
-bottom_hanger = make_half_circle(cq.Workplane("XY").center(4.75, -drop_height), 
-                                 -(d/2)).extrude(width)
+r = bottom_hanger_id/2
+xoff = 12.55
+bottom_hanger = make_half_circle(cq.Workplane("XY").center(xoff, -drop_height), 
+                                 -r).extrude(width)
 
-bottom_cut = make_half_circle(cq.Workplane("XY").center(4.75, -drop_height), 
-                              -(d/2-thickness)).extrude(width)
+bottom_cut = make_half_circle(cq.Workplane("XY").center(xoff, -drop_height), 
+                              -(r-thickness)).extrude(width)
 
 bottom_hanger = bottom_hanger.cut(bottom_cut)
 hook = hook.union(bottom_hanger)
