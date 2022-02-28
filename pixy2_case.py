@@ -76,8 +76,10 @@ third_cut = (
 case = case.cut(third_cut)
 
 # Make camera hole
-camera_offset = 17.5
+camera_offset = 15.5
 camera_d = 16
+lens_sq_side = 14.8
+lens_sq_screws = 4.8
 case = (
     case.faces("<Z").workplane(centerOption="CenterOfBoundBox")
         .center(0, camera_offset) 
@@ -89,13 +91,14 @@ lmb_cut_square = (
     case.faces("<Z").workplane(centerOption="CenterOfBoundBox")
         .center(0, camera_offset) 
         .workplane(offset=-(case_depth/2+board_thickness))
-        .rect(14.5, 14.5).extrude(-4, combine=False)
+        .rect(lens_sq_side, lens_sq_side).extrude(-4, combine=False)
 )
 
 lmb_cut_screw_gaps = (
     case.faces("<Z").workplane(centerOption="CenterOfBoundBox")
         .center(0, camera_offset) 
-        .rect(4.5, 14.5+(4.5*2)).extrude(-(case_depth/2+board_thickness)-4, combine=False)
+        .rect(lens_sq_screws, lens_sq_side+(lens_sq_screws*2))
+        .extrude(-(case_depth/2+board_thickness)-4, combine=False)
 )
 
 case = case.cut(lmb_cut_square).cut(lmb_cut_screw_gaps)
