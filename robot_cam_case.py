@@ -21,10 +21,23 @@ case = (
       .extrude(case_depth)
 )
 
+# Robot mounting holes
+inch = 25.4
+hole_spacing = (3/8)*inch
+top_hole_distance = hole_spacing*5
+vert_hole_distance = 0
+mount_block_w = 12.5
+mount_block_h = 10
+ten_screw_d = 5
+
+
+
+case = case.edges("|Z").fillet(2)
+
 posts = (
     cq.Workplane("XY")
       .rect(post_w, post_h, forConstruction=True).vertices()
-      .circle(post_d/2).extrude(case_depth-5)
+      .circle(post_d/2).extrude(case_depth-7)
 )
 
 screw_mounts = (
@@ -65,6 +78,29 @@ case = (
 )
 
 case = case.cut(lens_cut)
+
+case = (
+    case.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(0, -10)
+        .rect(top_hole_distance, vert_hole_distance, forConstruction=True)
+        .vertices()
+        .rect(mount_block_w, mount_block_h).extrude(-case_depth)
+)
+
+case = (
+    case.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(0, -10)
+        .rect(top_hole_distance, vert_hole_distance, forConstruction=True)
+        .vertices()
+        .circle(ten_screw_d/2).cutThruAll()
+)
+
+case = case.edges("|Z").edges(">X").fillet(2)
+case = case.edges("|Z").edges("<X").fillet(2)
+
+
 
 
 cq.exporters.export(case, 'output/robot_cam_case.stl')
