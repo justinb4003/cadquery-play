@@ -30,7 +30,7 @@ mount_block_w = 15
 mount_block_h = 15
 ten_screw_d = 6
 
-case = case.edges("|Z").fillet(2)
+case = case.edges("|Z").fillet(5)
 
 posts = (
     cq.Workplane("XY")
@@ -52,6 +52,7 @@ inner_case = (
 )
 
 case = case.cut(inner_case)
+
 case = case.union(posts).cut(screw_mounts)
 
 lens_mount_w = 14.5
@@ -109,7 +110,7 @@ top_post.faces("<Z")
         .circle(ten_screw_d/2).extrude(top_height, combine=False)
 )
 
-top_post = top_post.edges("|Y").edges(">Z").fillet(4.9)
+top_post = top_post.edges("|Y").edges(">Z").fillet(7)
 
 bottom_post = (
     case.faces("<Z")
@@ -137,14 +138,13 @@ bottom_post.faces("<Z")
         .center(-ten_screw_d/2, 0)
         .circle(ten_screw_d/2).extrude(top_height, combine=False)
 )
-bottom_post = bottom_post.edges("|Y").edges(">Z").fillet(4.9)
+bottom_post = bottom_post.edges("|Y").edges(">Z").fillet(7)
 
 case = case.union(top_post)
 case = case.union(bottom_post)
 case = case.cut(top_hole)
 case = case.cut(bottom_hole)
 
-case = case.edges("|Z").edges(">X").fillet(2)
-case = case.edges("|Z").edges("<X").fillet(2)
+
 
 cq.exporters.export(case, 'output/robot_cam_case.stl')
