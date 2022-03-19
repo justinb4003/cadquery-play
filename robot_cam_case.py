@@ -26,11 +26,9 @@ inch = 25.4
 hole_spacing = (3/8)*inch
 top_hole_distance = hole_spacing*5
 vert_hole_distance = 0
-mount_block_w = 12.5
-mount_block_h = 10
-ten_screw_d = 5
-
-
+mount_block_w = 15
+mount_block_h = 15
+ten_screw_d = 6
 
 case = case.edges("|Z").fillet(2)
 
@@ -79,28 +77,74 @@ case = (
 
 case = case.cut(lens_cut)
 
-case = (
+bottom_extra = 5
+top_extra = 5 
+
+top_height = -(case_depth+bottom_extra+top_extra)
+
+top_post = (
     case.faces("<Z")
         .workplane(centerOption="CenterOfBoundBox")
         .center(0, -10)
         .rect(top_hole_distance, vert_hole_distance, forConstruction=True)
-        .vertices()
-        .rect(mount_block_w, mount_block_h).extrude(-case_depth)
+        .vertices(">X")
+        .rect(mount_block_w, mount_block_h).extrude(top_height, combine=False)
 )
 
-case = (
+top_hole = (
+top_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .rect(ten_screw_d+0.1, ten_screw_d+0.1)
+        .extrude(top_height, combine=False)
+).union(
+top_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(ten_screw_d/2, 0)
+        .circle(ten_screw_d/2).extrude(top_height, combine=False)
+
+).union(
+top_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(-ten_screw_d/2, 0)
+        .circle(ten_screw_d/2).extrude(top_height, combine=False)
+)
+
+top_post = top_post.edges("|Y").edges(">Z").fillet(4.9)
+
+bottom_post = (
     case.faces("<Z")
         .workplane(centerOption="CenterOfBoundBox")
         .center(0, -10)
         .rect(top_hole_distance, vert_hole_distance, forConstruction=True)
-        .vertices()
-        .circle(ten_screw_d/2).cutThruAll()
+        .vertices("<X")
+        .rect(mount_block_w, mount_block_h).extrude(-(case_depth+bottom_extra), combine=False)
 )
+
+bottom_hole = (
+bottom_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .rect(ten_screw_d+0.1, ten_screw_d+0.1)
+        .extrude(top_height, combine=False)
+).union(
+bottom_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(ten_screw_d/2, 0)
+        .circle(ten_screw_d/2).extrude(top_height, combine=False)
+
+).union(
+bottom_post.faces("<Z")
+        .workplane(centerOption="CenterOfBoundBox")
+        .center(-ten_screw_d/2, 0)
+        .circle(ten_screw_d/2).extrude(top_height, combine=False)
+)
+bottom_post = bottom_post.edges("|Y").edges(">Z").fillet(4.9)
+
+case = case.union(top_post)
+case = case.union(bottom_post)
+case = case.cut(top_hole)
+case = case.cut(bottom_hole)
 
 case = case.edges("|Z").edges(">X").fillet(2)
 case = case.edges("|Z").edges("<X").fillet(2)
-
-
-
 
 cq.exporters.export(case, 'output/robot_cam_case.stl')
