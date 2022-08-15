@@ -37,9 +37,8 @@ lid = lid.cut(tokencut)
 
 lid = (
     lid
-    .edges("|Y").fillet(1)
-    .edges("|Z and <Y").fillet(1)
-    .edges("|Z and >Y").fillet(1)
+    .edges("|X").chamfer(lid_thick * 0.25)
+    .edges("|Z").fillet(lid_thick * 0.25 * 1.2)
 )
 
 diamond_cut = (
