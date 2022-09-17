@@ -2,7 +2,7 @@ import cadquery as cq
 
 bottle1_od = 50.0
 bottle2_od = 38.0
-rack_height = 60
+rack_height = 40
 funnel_depth = 8
 bottle_padding = 15
 bottles = 2
@@ -10,7 +10,7 @@ bottles = 2
 avg_bottle_od = (bottle1_od+bottle2_od)/2
 
 block_width = bottles * (avg_bottle_od + bottle_padding) + 15
-block_depth = (bottle1_od + bottle_padding)
+block_depth = (bottle1_od + bottle_padding) + 10
 
 rack = (
     cq.Workplane("XY")
