@@ -7,16 +7,13 @@ funnel_depth = 8
 bottle_padding = 15
 bottles = 2
 
+lid_inner_height = 110
+lid_thickness = 2.5
+
 avg_bottle_od = (bottle1_od+bottle2_od)/2
 
 block_width = bottles * (avg_bottle_od + bottle_padding) + 15
 block_depth = (bottle1_od + bottle_padding) + 10
-
-rack = (
-    cq.Workplane("XY")
-      .rect(block_width, block_depth)
-      .extrude(rack_height)
-)
 
 def cut_hole(body, x, y, bottle_od):
     funnel_od = bottle_od + 5
@@ -48,6 +45,13 @@ def cut_hole(body, x, y, bottle_od):
     body = body.cut(hole)
     return body
 
+rack = (
+    cq.Workplane("XY")
+      .rect(block_width, block_depth)
+      .extrude(rack_height)
+)
+
+
 rack = cut_hole(rack, 32, 0, bottle1_od)
 rack = cut_hole(rack, -36, 0, bottle2_od)
 # rack = cut_hole(rack, (funnel_od+bottle_padding/2), 0)
@@ -55,5 +59,24 @@ rack = cut_hole(rack, -36, 0, bottle2_od)
 rack = rack.edges("|Z").fillet(12.0)
 rack = rack.edges(">Z").fillet(1.0)
 
+lid =  (
+    cq.Workplane("XY")
+      .rect(block_width + lid_thickness*2, block_depth + lid_thickness*2)
+      .extrude(lid_inner_height+lid_thickness)
+)
+
+lid = lid.edges("|Z").fillet(12.0)
+
+lid_cut = (
+    cq.Workplane("XY")
+      .rect(block_width+0.1, block_depth+0.1)
+      .extrude(lid_inner_height)
+      .edges("|Z").fillet(12)
+
+)
+
+lid = lid.cut(lid_cut)
+
 
 cq.exporters.export(rack, 'output/backpain.stl')
+cq.exporters.export(lid, 'output/backpain_lid.stl')
