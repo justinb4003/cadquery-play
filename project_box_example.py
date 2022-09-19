@@ -103,9 +103,22 @@ bottom = (
 )
 
 lid = topOfLid
-result = topOfLid.union(bottom)
+
+support1 = (
+    lid.faces(">Z")
+    .workplane(centerOption="CenterOfBoundBox")
+    .center(2, 17).rect(5, 4).extrude(4, combine=False)
+)
+support2 = (
+    lid.faces(">Z")
+    .workplane(centerOption="CenterOfBoundBox")
+    .center(-2, -17).rect(5, 4).extrude(4, combine=False)
+)
+
+lid = lid.union(support1).union(support2)
+result = lid.union(bottom)
 
 
-cq.exporters.export(top, 'output/box_top.stl')
+cq.exporters.export(lid, 'output/box_lid.stl')
 cq.exporters.export(bottom, 'output/box_bottom.stl')
 cq.exporters.export(result, 'output/toggle_box.stl')
