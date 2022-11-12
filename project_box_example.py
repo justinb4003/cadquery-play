@@ -80,10 +80,10 @@ topOfLid = (
     .hole(toggle_hole_d)
 )
 
-for f in [">Z", "<Z"]:
+for f in [">Z"]:
     topNutCut = (
         topOfLid.faces(f)
-        .workplane(offset=-1.5, centerOption='CenterOfBoundBox')
+        .workplane(offset=-2.5, centerOption='CenterOfBoundBox')
         .polygon(6, toggle_nut_d).extrude(10, combine=False)
     )
     topOfLid = topOfLid.cut(topNutCut)
@@ -107,12 +107,12 @@ lid = topOfLid
 support1 = (
     lid.faces(">Z")
     .workplane(centerOption="CenterOfBoundBox")
-    .center(2, 17).rect(5, 4).extrude(4, combine=False)
+    .center(-2, 16).rect(5, 4).extrude(8, combine=False)
 )
 support2 = (
     lid.faces(">Z")
     .workplane(centerOption="CenterOfBoundBox")
-    .center(-2, -17).rect(5, 4).extrude(4, combine=False)
+    .center(2, -16).rect(5, 4).extrude(8, combine=False)
 )
 
 lid = lid.union(support1).union(support2)
