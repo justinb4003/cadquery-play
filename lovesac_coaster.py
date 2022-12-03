@@ -50,7 +50,6 @@ coaster = (
 
 # coaster = coaster.union(insert)
 coaster = coaster.cut(cupcut)
-# coaster = coaster.edges(">Y").fillet(2)
 
 screw_head_space = (
     coaster.faces("<Y")
@@ -58,6 +57,7 @@ screw_head_space = (
     .circle(screw_head_d/2).extrude(10, combine=False)
 )
 coaster = coaster.cut(screw_head_space)
+coaster = coaster.edges(">Y").fillet(2)
 
 cq.exporters.export(coaster, 'output/coaster.stl')
 cq.exporters.export(insert, 'output/coaster_insert.stl')
