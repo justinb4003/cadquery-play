@@ -1,7 +1,7 @@
 import cadquery as cq
 
-insert_od = 90
-insert_h = 15
+insert_od = 87.0  # Was 90 originally, too big. I measure 88.1mm max, let's try 87
+insert_h = 5
 coaster_od = 120
 cup_od = 100
 coaster_h = 9 
@@ -9,7 +9,7 @@ coaster_h = 9
 screw_head_d = 6  # Mostly really the expect screw driver OD 
 # 2.54mm is the height of the head of a phillips pan head m3 screw
 screw_head_h = 2.54 + 0.05  # A little fudge to ensure it is sunk
-screw_d = 3 + 0.1  # Fudge again
+screw_d = 3 + 0.25  # Fudge again
 screw_extra_h = 3  # Lip of the coaster to keep around for screw to bite
 
 insert = (
