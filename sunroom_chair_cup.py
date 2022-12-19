@@ -23,7 +23,7 @@ cup_holder = cup_holder.faces("<Z").edges().fillet(4)
 
 cup_holder = (
     cup_holder.faces(">Z[-2]")
-    .cboreHole(3.5, 5, 3)
+    .cboreHole(3.5, 6.5, 3)
 )
 cup_holder = cup_holder.faces(">Z").edges().fillet(2)
 
