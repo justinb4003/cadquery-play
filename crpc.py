@@ -79,14 +79,19 @@ corner_plate = (
         .center(0, -(filter_width+rib_width))
         .rect(corner_width, rib_width).extrude(rib_depth)
 )
+corner_plate = corner_plate.faces("<Z").edges("|X").fillet(1.5)
+corner_plate = corner_plate.faces(">Z").edges("|X").fillet(1.5)
+corner_plate = corner_plate.faces("<X").edges("|Z").fillet(1.5)
+
 corner = (
-    corner_plate.rotate((0, 0, 0), (0, 1, 0), 90)
+    corner_plate
+    .mirror(mirrorPlane="YZ", basePointVector=(0, 0, 0))
+    .rotate((0, 0, 0), (0, 1, 0), 90)
     .translate((-corner_width/2, 0, corner_width/2))
 )
-
+# corner = corner.edges("<Y and <Z").fillet(1.5)
 corner_plate = corner_plate.union(corner)
-corner_plate = corner_plate.faces("<X").edges("|Z").fillet(1.5)
-corner_plate = corner_plate.faces("<Z").edges("|X").fillet(1.5)
+
 
 cq.exporters.export(fan_plate, 'output/cr_fanplate.stl')
 cq.exporters.export(nofan_plate, 'output/cr_nofanplate.stl')
