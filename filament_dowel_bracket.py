@@ -41,18 +41,21 @@ bracket = bracket.cut(bigcut)
 bracket = bracket.edges("|Z").fillet(10)
 
 # build holes for deck screws
-screw_hole_d = 5.5
+screw_hole_d = 6.0
 top_x = 50
-bottom_x = -15 
-bracket = (
+bottom_x = -15
+
+screwholes = (
     bracket.faces("-X")
-    .workplane(centerOption="CenterOfBoundBox")
-    .moveTo(top_x, 0).circle(screw_hole_d/2).cutThruAll()
-    .moveTo(bottom_x, 0).circle(screw_hole_d/2).cutThruAll()
+    .workplane(centerOption="CenterOfBoundBox", invert=True)
+    .moveTo(top_x, 0).circle(screw_hole_d/2).extrude(100, combine=False)
+    .moveTo(bottom_x, 0).circle(screw_hole_d/2).extrude(25, combine=True)
 )
 
+bracket = bracket.cut(screwholes)
+
 # build around a half inch (12mm) hole for a washer around said screw
-screw_hole_d = 12 
+screw_hole_d = 15 
 top_x = 50
 bottom_x = -15 
 washer_holes = (
